@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>⚔️ Wordcraft Rally - Colegio Montreal ⚔️</title>
+    <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --oro: #d4af37; --oro-viejo: #a67c00; --pergamino: #f4e4bc;
+            --sangre: #8b0000; --sangre-oscura: #5d0000; --madera: #2c1e14;
+            --azul-real: #1a237e;
+        }
+        body {
+            background-color: var(--madera);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: #3e2723; font-family: 'Special Elite', serif;
+            display: flex; justify-content: center; padding: 20px; margin: 0; min-height: 100vh;
+        }
+        .pergamino-principal {
+            background-color: var(--pergamino);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            padding: 40px; border-radius: 15px; width: 100%; max-width: 900px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8); border: 12px solid #5d4037;
+            position: relative;
+        }
+        h1 { font-family: 'MedievalSharp'; text-align: center; color: var(--sangre); font-size: 3rem; margin: 0; }
+        .subtitulo { font-family: 'MedievalSharp'; text-align: center; color: var(--oro-viejo); font-size: 1.2rem; margin-bottom: 20px; }
+        
+        #timer {
+            font-family: 'MedievalSharp'; font-size: 3.5rem; text-align: center; color: var(--sangre);
+            margin: 15px 0; border-top: 3px double var(--sangre); border-bottom: 3px double var(--sangre);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .contenedor-cabecera-dual {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; margin: 20px 0;
+        }
+        .marco-royal {
+            border: 3px solid var(--oro);
+            box-shadow: 0 0 15px var(--oro), inset 0 0 8px var(--oro-viejo);
+            background: white; padding: 6px; border-radius: 8px;
+            animation: destelloReal 2s infinite alternate;
+            width: 90px; height: 90px; display: flex; align-items: center; justify-content: center;
+        }
+        .marco-royal img { display: block; max-width: 100%; max-height: 100%; border-radius: 4px; }
+
+        @keyframes destelloReal {
+            0% { box-shadow: 0 0 10px var(--oro); border-color: var(--oro-viejo); }
+            100% { box-shadow: 0 0 25px var(--oro), 0 0 10px #fff; border-color: #fff; }
+        }
+
+        .btn { cursor: pointer; padding: 15px; width: 100%; font-family: 'MedievalSharp'; font-size: 1.2rem; border-radius: 10px; border: 2px solid var(--sangre-oscura); transition: 0.3s; text-decoration: none; display: inline-block; text-align: center; font-weight: bold; }
+        .btn-principal { background: linear-gradient(to bottom, var(--sangre), var(--sangre-oscura)); color: white; }
+        .btn-descarga { background: linear-gradient(to bottom, var(--azul-real), #0d1a40); color: white; margin-bottom: 20px; }
+        
+        .mision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-top: 25px; }
+        .mision-card { background: rgba(255,255,255,0.4); border: 3px solid #8d6e63; padding: 15px; text-align: center; cursor: pointer; border-radius: 10px; transition: 0.3s; }
+        .mision-card:hover { transform: scale(1.05); border-color: var(--oro); box-shadow: 0 0 15px var(--oro); }
+        .mision-card.exito { background: linear-gradient(135deg, #dcedc8, #a5d6a7) !important; border-color: #2e7d32 !important; cursor: default; }
+        
+        .zona-entrega { border: 4px dashed var(--sangre); padding: 30px; text-align: center; background: rgba(255,255,255,0.3); border-radius: 15px; }
+        #feedback { display: none; margin-top: 20px; padding: 20px; border: 3px solid var(--oro); background: white; border-radius: 10px; }
+        .reporte-lista { text-align: left; list-style: none; padding: 0; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="pergamino-principal">
+    <h1>⚔️ Wordcraft Rally ⚔️</h1>
+    <div class="subtitulo">Gesta Digital - Colegio Montreal</div>
+    <div id="timer">00:00</div>
+
+    <div id="pantalla-registro">
+        <div class="contenedor-cabecera-dual">
+            <div class="marco-royal"><img src="https://drive.google.com/thumbnail?id=1RLRKrkM2rUeObP6Q1ZAPoJKIY24k8hB9&sz=w500" alt="Escudo"></div>
+            <div style="text-align: center; flex-grow: 1;"><h3 style="font-family: 'MedievalSharp'; color: var(--oro-viejo); margin: 0;">RECLUTAMIENTO</h3></div>
+            <div class="marco-royal"><img src="https://drive.google.com/thumbnail?id=1qcu_-ESqDlDL3njcdQC9GoYhtJGHek5d&sz=w500" alt="Escudo"></div>
+        </div>
+
+        <label><b>👑 Selecciona tu Reino:</b></label>
+        <select id="selectEquipo" style="width:100%; padding:15px; margin:15px 0; font-size:1.1rem; border-radius:8px; font-family: 'Special Elite';">
+            <option value="Equipo 1">🏰 ARCADIA (Equipo 1)</option>
+            <option value="Equipo 2">☀️ SHURIMA (Equipo 2)</option>
+            <option value="Equipo 3">🛡️ DEMACIA (Equipo 3)</option>
+            <option value="Equipo 4">🌸 KYOSHU (Equipo 4)</option>
+            <option value="Equipo 5">🏹 ARMETIS (Equipo 5)</option>
+            <option value="Equipo 6">🌙 BUENANOTTE (Equipo 6)</option>
+        </select>
+        <button class="btn btn-principal" onclick="comenzarRally()">¡INICIAR LA GESTA!</button>
+    </div>
+
+    <div id="pantalla-mapa" style="display:none">
+        <div id="lista-misiones" class="mision-grid"></div>
+    </div>
+
+    <div id="area-trabajo" style="display:none">
+        <button onclick="irAlMapa()" style="color:var(--sangre); cursor:pointer; background:none; border:none; font-weight:bold; font-family:'MedievalSharp'; margin-bottom:15px;">⬅ VOLVER AL MAPA</button>
+        <h2 id="titulo-mision" style="text-align:center; color:var(--sangre);"></h2>
+        <div id="contenedor-instrucciones" style="background: rgba(255,255,255,0.5); padding: 15px; border-left: 5px solid var(--oro); margin: 15px 0; text-align: left;">
+            <strong>📜 Instrucciones de la Misión:</strong>
+            <div id="texto-instrucciones" style="margin-top:5px; font-size: 0.9rem;"></div>
+        </div>
+        <div id="descarga-container" style="text-align:center;"></div>
+        <div class="zona-entrega">
+            <input type="file" id="archivoInput" accept=".docx"><br><br>
+            <button id="btnCalificar" class="btn btn-principal" onclick="procesarEntrega()">¡SOLICITAR VEREDICTO!</button>
+        </div>
+        <div id="feedback"></div>
+    </div>
+</div>
+
+<script>
+const APPSHEET_ID = "a052908b-6997-4e4d-868b-5c0ab8c75d68";
+const APPSHEET_KEY = "V2-qFFCd-wZKhA-2ohtA-7Dqcg-eYj0l-djOcp-KLU1t-wev3m";
+const TABLA_NOMBRE = "Rally";
+
+const misiones = [
+    { id: "M1", titulo: "Misión 1: Configuración Real", icono: "📜", objs: ["sectpr", "page-break", "header", "pgnum", "margin"], nombres: ["Márgenes Personalizados", "Orientación Horizontal", "Saltos de Sección", "Encabezado Diferente", "Numeración (Inicia en 3)"], instrucciones: "• Configura márgenes personalizados.<br>• Pon la segunda hoja en horizontal.<br>• Inserta saltos de sección.<br>• Encabezado diferente en pág 1.<br>• Numeración iniciando en 3.", url: "https://docs.google.com/uc?export=download&id=1evvJUB2Ifdsipq5u73G_CaW_hDHw92hB" },
+    { id: "M2", titulo: "Misión 2: Estilos y Referencias", icono: "👥", objs: ["h1", "h2", "toc", "line-height", "footnote"], nombres: ["Estilo Título 1", "Estilo Título 2", "Tabla de contenido", "Interlineado", "Nota al pie"], instrucciones: "• Aplica estilos Título 1 y 2.<br>• Genera tabla de contenido automática.<br>• Ajusta el interlineado del documento.<br>• Inserta una nota al pie al final.", url: "https://docs.google.com/uc?export=download&id=147rbZMsvrlq4B-q4B5LEa3NyAOW9Y9S9" },
+    { id: "M3", titulo: "Misión 3: Tablas y Cálculos", icono: "📊", objs: ["table", "tr-style", "vmerge", "sort", "field", "thead"], nombres: ["Insertar Tabla", "Estilo Tabla", "Celdas Combinadas", "Orden de Datos", "Fórmula", "Encabezados"], instrucciones: "• Crea una tabla con estilo personalizado.<br>• Combina celdas según el modelo.<br>• Ordena los datos alfabéticamente.<br>• Usa fórmulas de SUMA o PROMEDIO.<br>• Repite fila de encabezados.", url: "https://docs.google.com/uc?export=download&id=1I_eWG3OpaFzlhanIiAlYfh3LF-oXQ_8h" },
+    { id: "M4", titulo: "Misión 4: Gráficos y Arte", icono: "🚀", objs: ["img", "drawing", "diagram", "color-map", "3d-scene", "textpath", "align-center"], nombres: ["Imagen", "Ajuste Cuadrado", "Efecto Artístico", "SmartArt Ciclo", "Diseño 3D", "WordArt", "Alineación"], instrucciones: "• Inserta imagen con ajuste cuadrado.<br>• Aplica efecto 'Boceto con lápiz'.<br>• Crea SmartArt de Ciclo en 3D.<br>• Inserta WordArt: 'PROYECTO ESPACIAL'.<br>• Alinea objetos al centro.", url: "https://docs.google.com/uc?export=download&id=1xi816rekK44uO840YB1NZHpRGf6_VKLv" },
+    { id: "M5", titulo: "Misión 5: Seguridad Final", icono: "🛡️", objs: ["no-author", "encrypted", "Admin2026", "pdf-trace"], nombres: ["Limpieza Metadatos", "Cifrado con Clave", "Clave Correcta", "Exportación PDF"], instrucciones: "• Inspecciona y quita info personal.<br>• Cifra con clave: Admin2026.<br>• Exporta como PDF.<br>• Sube el .docx original cifrado.", url: "https://docs.google.com/uc?export=download&id=1P8F6o5adlFbbaqqkEN2mVxBRmXLuzan4" }
+];
+
+let misionesRealizadas = JSON.parse(localStorage.getItem('misionesMontreal')) || {};
+let segundosTotales = 0; let cronoInterval = null; let misionActualIdx = null;
+
+function comenzarRally() {
+    document.getElementById('pantalla-registro').style.display = 'none';
+    document.getElementById('pantalla-mapa').style.display = 'block';
+    renderMapa();
+}
+
+function renderMapa() {
+    const grid = document.getElementById('lista-misiones'); grid.innerHTML = "";
+    misiones.forEach((m, i) => {
+        const estado = misionesRealizadas[m.id];
+        grid.innerHTML += `<div class="mision-card ${estado || ''}" onclick="${estado === 'exito' ? '' : 'abrirMision('+i+')'}">
+            <strong>${m.id}</strong><span class="mision-icon">${m.icono}</span><span>${m.titulo}</span>
+        </div>`;
+    });
+}
+
+function abrirMision(i) {
+    misionActualIdx = i; const m = misiones[i];
+    document.getElementById('archivoInput').value = ""; 
+    document.getElementById('feedback').style.display = 'none';
+    document.getElementById('btnCalificar').disabled = false;
+    document.getElementById('pantalla-mapa').style.display = 'none';
+    document.getElementById('area-trabajo').style.display = 'block';
+    document.getElementById('titulo-mision').innerText = m.titulo;
+    document.getElementById('texto-instrucciones').innerHTML = m.instrucciones;
+    document.getElementById('descarga-container').innerHTML = `<a href="${m.url}" class="btn btn-descarga">📥 BAJAR PERGAMINO ${m.id}</a>`;
+    if(!cronoInterval) { cronoInterval = setInterval(() => { segundosTotales++; document.getElementById('timer').innerText = formatTimer(segundosTotales); }, 1000); }
+}
+
+function formatTimer(s) { return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }
+
+async function enviarAAppSheet(equipo, misionId, calif, tiempo) {
+    const url = `https://api.appsheet.com/api/v2/apps/${APPSHEET_ID}/tables/${TABLA_NOMBRE}/Action`;
+    const num = misionId.replace("M", "");
+    const filaUpdate = { "Equipo": equipo };
+    filaUpdate[`Calif E${num}`] = calif.toString();
+    filaUpdate[`Tiempo E${num}`] = tiempo;
+    try { await fetch(url, { method: 'POST', headers: { 'ApplicationAccessKey': APPSHEET_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ "Action": "Edit", "Rows": [ filaUpdate ] }) }); } catch (e) { console.error("Error AppSheet:", e); }
+}
+
+async function procesarEntrega() {
+    const fileInput = document.getElementById('archivoInput');
+    if(!fileInput.files[0]) return alert("¡Sube tu pergamino!");
+    clearInterval(cronoInterval); cronoInterval = null; 
+    
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const m = misiones[misionActualIdx];
+            const { value: rawText } = await mammoth.extractRawText({ arrayBuffer: e.target.result });
+            const { value: html } = await mammoth.convertToHtml({ arrayBuffer: e.target.result });
+            const docData = (html + rawText).toLowerCase();
+            let aciertos = 0; let reporte = `<ul class="reporte-lista">`;
+            
+            m.objs.forEach((obj, idx) => {
+                if(docData.includes(obj.toLowerCase())) { aciertos++; reporte += `<li style="color:green">✅ ${m.nombres[idx]}</li>`; }
+                else { reporte += `<li style="color:red">❌ ${m.nombres[idx]}</li>`; }
+            });
+            reporte += `</ul>`;
+            const calif = Math.round((aciertos / m.objs.length) * 100);
+            const feedback = document.getElementById('feedback');
+
+            if(calif >= 80) {
+                misionesRealizadas[m.id] = 'exito';
+                document.getElementById('btnCalificar').disabled = true;
+                feedback.innerHTML = `<h3>🏆 ¡Misión Lograda! (${calif}%)</h3>${reporte}<p>Progreso guardado.</p>`;
+            } else {
+                misionesRealizadas[m.id] = 'fallo';
+                feedback.innerHTML = `<h3>⚠️ Gesta Incompleta (${calif}%)</h3>${reporte}<p>Revisa los errores y vuelve a intentarlo.</p>`;
+                if(!cronoInterval) cronoInterval = setInterval(() => { segundosTotales++; document.getElementById('timer').innerText = formatTimer(segundosTotales); }, 1000);
+            }
+            localStorage.setItem('misionesMontreal', JSON.stringify(misionesRealizadas));
+            await enviarAAppSheet(document.getElementById('selectEquipo').value, m.id, calif, document.getElementById('timer').innerText);
+            feedback.style.display = 'block'; 
+        } catch (err) {
+            alert("Error al leer el archivo.");
+            if(!cronoInterval) cronoInterval = setInterval(() => { segundosTotales++; document.getElementById('timer').innerText = formatTimer(segundosTotales); }, 1000);
+        }
+    };
+    reader.readAsArrayBuffer(fileInput.files[0]);
+}
+
+function irAlMapa() { document.getElementById('area-trabajo').style.display = 'none'; document.getElementById('pantalla-mapa').style.display = 'block'; renderMapa(); }
+</script>
+</body>
+</html>
